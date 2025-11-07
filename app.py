@@ -7,22 +7,33 @@ from flask_jwt_extended import (
 import os
 import qrcode
 
-
 app = Flask(__name__)
 
 # ------------------------
 # CONFIGURAÇÕES
 # ------------------------
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:kleber108d@localhost/equipamentosdb'
+
+# Caminho base do projeto
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+# Se existir a variável DATABASE_URL (no Render), usa ela; senão, usa SQLite local
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+    "DATABASE_URL",
+    f"sqlite:///{os.path.join(BASE_DIR, 'database.db')}"
+)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'chave-secreta-aqui'  # muda isto depois!
+app.config['JWT_SECRET_KEY'] = 'chave-secreta-aqui'  # 🔒 Muda isto depois!
 app.config['UPLOAD_FOLDER'] = os.path.join('static', 'qrcodes')
 
+# Inicializa extensões
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
+# Garante que a pasta de QR Codes existe
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
 
 # ------------------------
 # MODELOS

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leitor de QR Code</title>
+          <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+
+  <!-- Manifesto do PWA -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Cor da barra superior (Android) -->
+  <meta name="theme-color" content="#007bff">
+
+  
+</head>
+<body>
+    <div class="button-container">
+        <button class="circular-button" id="registo-btn">Registo Equipamento</button>
+        <button class="circular-button" id="procurar-btn">Procurar Equipamento</button>
+    </div>
+
+    <!-- Modal para Registo -->
+    <div class="modal" id="registo-modal">
+        <div class="modal-content">
+            <span class="close" id="close-registo">&times;</span>
+            <h2>Registo</h2>
+            <input type="text" placeholder="Nome" id="nome-registo">
+            <input type="text" placeholder="Localização" id="localizacao">
+            <input type="text" placeholder="Estado" id="estado">
+            <button id="confirmar-registo">Confirmar Registo</button>
+        </div>
+    </div>
+
+    <!-- Modal para Código após Registo -->
+    <div class="modal" id="codigo-modal">
+        <div class="modal-content">
+            <span class="close" id="close-codigo">&times;</span>
+            <h2>CODIGO :</h2>
+            <p id="codigo-display"></p>
+            <button id="fechar-codigo">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal para Procurar -->
+    <div class="modal" id="procurar-modal">
+    <div class="modal-content">
+        <span class="close" id="close-procurar">&times;</span>
+        <h2>Procurar Equipamento</h2>
+
+        <!-- Área do leitor de QR -->
+        <div id="qr-reader" style="width: 100%; max-width: 300px; margin: 0 auto;"></div>
+
+        <input type="text" placeholder="Código do Equipamento" id="codigo" readonly>
+        <button id="confirmar-procurar">Procurar</button>
+
+        <!-- Resultados -->
+        <div id="resultado-equipamento" style="margin-top: 15px; display: none;">
+        <h3>Resultado:</h3>
+        <p><strong>Nome:</strong> <span id="res-nome"></span></p>
+        <p><strong>Localização:</strong> <span id="res-localizacao"></span></p>
+        <p><strong>Estado:</strong> <span id="res-estado"></span></p>
+        </div>
+    </div>
+    </div>
+
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='libs/html5-qrcode.min.js') }}"></script>
+  <script src="app.js"></script>  
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>

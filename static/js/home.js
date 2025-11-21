@@ -95,7 +95,23 @@ confirmarRegisto.addEventListener('click', async () => {
 });
 
 // Fechar modal de código
-fecharCodigo.addEventListener('click', () => codigoModal.style.display = 'none');
+closeProcurar.addEventListener('click', () => {
+    procurarModal.style.display = 'none';
+
+    // Parar scanner se estiver a correr
+    if (qrReader && scanning) {
+        qrReader.stop().then(() => {
+            console.log("Scanner parado ao fechar modal.");
+            scanning = false;
+
+            // limpar div para evitar bugs no mobile
+            document.getElementById('qr-reader').innerHTML = "";
+        }).catch(err => console.error("Erro ao parar scanner:", err));
+    } else {
+        document.getElementById('qr-reader').innerHTML = "";
+    }
+});
+
 
   // =======================
 // PROCURAR EQUIPAMENTO

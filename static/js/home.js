@@ -208,3 +208,44 @@ confirmarProcurar.addEventListener('click', async () => {
     alert("Erro ao procurar equipamento.");
   }
 });
+
+// =======================
+// IMPRIMIR QR CODE
+// =======================
+
+document.getElementById('imprimir-qr').addEventListener('click', () => {
+    const conteudo = document.getElementById('codigo-display').innerHTML;
+
+    // Abre uma nova janela só com o QR
+    const printWindow = window.open('', '', 'width=400,height=600');
+
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Imprimir QR Code</title>
+            <style>
+                body {
+                    font-family: Arial;
+                    text-align: center;
+                    padding-top: 20px;
+                }
+                img {
+                    width: 250px;
+                    margin-top: 20px;
+                }
+            </style>
+        </head>
+        <body>
+            ${conteudo}
+            <script>
+                window.onload = function() {
+                    window.print();
+                    window.close();
+                }
+            </script>
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+});

@@ -117,39 +117,51 @@ procurarBtn.addEventListener('click', async () => {
   }
 
   try {
-    // Obtém câmaras disponíveis
-    const cameras = await Html5Qrcode.getCameras();
-    if (!cameras || !cameras.length) {
-      alert("Nenhuma câmara encontrada no dispositivo.");
-      return;
-    }
-
-    // Cria instância se não existir
-    if (!qrReader) {
-      qrReader = new Html5Qrcode("qr-reader");
-    }
-
-    // Evita iniciar o scanner mais de uma vez
-    if (scanning) return;
-    scanning = true;
-
-    // Inicia leitura
-    await qrReader.start(
-      cameras[0].id,
-      { fps: 10, qrbox: 200 },
-      (decodedText) => {
-        document.getElementById('codigo').value = decodedText;
-
-        // Para o scanner assim que o QR é lido
-        qrReader.stop().then(() => {
-          console.log("QR scanning stopped.");
-          scanning = false;
-        }).catch(err => console.error("Erro ao parar scanner:", err));
-      },
-      (errorMessage) => {
-        // erros de leitura são normais — ignoramos
+      // Obtém câmaras disponíveis
+      const cameras = await Html5Qrcode.getCameras();
+      if (!cameras || !cameras.length) {
+        alert("Nenhuma câmara encontrada no dispositivo.");
+        return;
       }
-    );
+
+      // 🔍 Procurar câmera traseira pelo nome
+      let backCamera = cameras.find(cam =>
+        cam.label.toLowerCase().includes("back") ||
+        cam.label.toLowerCase().includes("rear") ||
+        cam.label.toLowerCase().includes("traseira")
+      );
+
+      // Se não encontrar, usar a última (que normalmente é a traseira)
+      let cameraId = backCamera ? backCamera.id : cameras[cameras.length - 1].id;
+
+      console.log("📸 Usando a câmera:", backCamera ? backCamera.label : "Última da lista");
+
+      // Cria instância se não existir
+      if (!qrReader) {
+        qrReader = new Html5Qrcode("qr-reader");
+      }
+
+      // Evita iniciar o scanner mais de uma vez
+      if (scanning) return;
+      scanning = true;
+
+      // Inicia leitura na câmera traseira
+      await qrReader.start(
+        cameraId,
+        { fps: 10, qrbox: 200 },
+        (decodedText) => {
+          document.getElementById('codigo').value = decodedText;
+
+          // Para o scanner assim que o QR é lido
+          qrReader.stop().then(() => {
+            console.log("QR scanning stopped.");
+            scanning = false;
+          }).catch(err => console.error("Erro ao parar scanner:", err));
+        },
+        (errorMessage) => {
+          // erros de leitura são normais — ignoramos
+        }
+      );
 
   } catch (err) {
     console.error("Erro ao aceder à câmara:", err);

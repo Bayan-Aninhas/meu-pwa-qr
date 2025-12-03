@@ -31,15 +31,19 @@
 
     <section class="features">
         <article class="feature">
-            <div class="qr-icon">⬜⬛⬜<br>⬛⬜⬛<br>⬜⬛⬜</div>
+            <div class="qr-icon">
+                 <img src="{{ url_for('static', filename='images/qr-create.png') }}" alt="QR Create Icon">
+            </div>
             <h3>Registo Equipamento</h3>
-            <p>Crie códigos QR para os equipamentos adicionando detalhes como nome, localização e estado.</p>
+            <p>Crie códigos QR para os equipamentos </p>
             <button class="btn" id="registo-btn">Registar</button>
         </article>
         <article class="feature">
-            <div class="qr-icon">⬛⬜⬛<br>⬜⬛⬜<br>⬛⬜⬛</div>
+            <div class="qr-icon">
+                 <img src="{{ url_for('static', filename='images/qr-search.png') }}" alt="QR Search Icon">
+            </div>
             <h3>Procurar Equipamento</h3>
-            <p>Escaneie QR codes para pesquisar rapidamente os equipamentos existentes na base de dados.</p>
+            <p>Use a câmara para ler códigos QR</p>
             <button class="btn" id="procurar-btn">Procurar</button>
         </article>
     </section>

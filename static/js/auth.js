@@ -1,3 +1,4 @@
+// ===== Mostra Forms =====
 function showForm(formType) {
     const buttons = document.getElementById('main-buttons');
     buttons.classList.add('hidden');
@@ -25,6 +26,7 @@ function hideForm() {
     }
 }
 
+// ===== Alterna entre Login e Registo =====
 function switchForm(formType) {
     const currentForm = document.querySelector('.form-container.active');
     if (currentForm) {
@@ -40,32 +42,6 @@ function switchForm(formType) {
         }, 500);
     }
 }
-
-
-
-
-
-// ===== Mostra Forms =====
-function showRegister() {
-    document.getElementById('main-buttons').classList.add('hidden');
-    setTimeout(() => {
-        const form = document.getElementById('register-form');
-        form.classList.remove('hidden');
-        form.classList.add('active');
-    }, 400);
-}
-
-function showLogin() {
-    document.getElementById('main-buttons').classList.add('hidden');
-    setTimeout(() => {
-        const form = document.getElementById('login-form');
-        form.classList.remove('hidden');
-        form.classList.add('active');
-    }, 400);
-}
-
-
-
 
 // ===== LOGIN =====
 document.getElementById('loginForm').addEventListener('submit', async (e) => {

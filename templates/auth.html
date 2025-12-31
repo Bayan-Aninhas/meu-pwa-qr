@@ -14,7 +14,7 @@
     <div class="decoration lower-right"></div>
 
     <div class="container">
-        <img src="{{ url_for('static', filename='images/qr-code.png') }}" alt="QR Code" class="logo">
+        <img src="{{ url_for('static', filename='images/qr-coe.png') }}" alt="QR Code" class="logo">
         <div class="app-name">A Minha App</div>
         <div class="buttons" id="main-buttons">
             <button class="sign-up" onclick="showForm('signup')">Registar</button>
@@ -26,7 +26,7 @@
             <button class="close-btn" onclick="hideForm()">×</button>
             <h3>Registar</h3>
             <form id="signupForm">
-                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="username" placeholder="Nome de utilizador" required>
                 <input type="password" name="password" placeholder="Palavra-passe" required>
                 <input type="password" name="confirm_password" placeholder="Confirmar Palavra-passe" required>
                 <button type="submit" class="submit-btn">Registar</button>
@@ -40,7 +40,7 @@
             <button class="close-btn" onclick="hideForm()">×</button>
             <h3>Iniciar Sessão</h3>
             <form id="loginForm">
-                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="username" placeholder="Nome de utilizador" required>
                 <input type="password" name="password" placeholder="Palavra-passe" required>
                 <button type="submit" class="submit-btn">Iniciar Sessão</button>
             </form>

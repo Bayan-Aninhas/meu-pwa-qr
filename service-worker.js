@@ -6,28 +6,30 @@ if (workbox) {
   console.log("Falha ao carregar Workbox");
 }
 
-// Instalação do Service Worker
+// ---------- Instalação e ativação ----------
 self.addEventListener('install', event => {
   console.log('Service Worker instalado!');
   self.skipWaiting(); // Ativa o SW imediatamente
 });
 
-// Ativação do Service Worker
 self.addEventListener('activate', event => {
   console.log('Service Worker ativado!');
   self.clients.claim(); // Assume o controlo das páginas imediatamente
 });
 
-// Cache de HTML, CSS e JS essenciais (pre-cache)
+// ---------- Pre-cache ----------
 workbox.precaching.precacheAndRoute([
-  { url: '/', revision: '1' },
-  { url: '/index.html', revision: '1' },
+  { url: '/auth.html', revision: '1' },
+  { url: '/home.html', revision: '1' },             // Página home
+  { url: '/offline.html', revision: '1' },     // Página de fallback offline
+  { url: '/manifest.json', revision: '1' },    // Manifest
   { url: '/css/auth.css', revision: '1' },
+  { url: '/css/home.css', revision: '1' },
   { url: '/js/auth.js', revision: '1' },
   { url: '/js/app.js', revision: '1' },
 ]);
 
-// Regra para imagens: NetworkFirst
+// ---------- Cache de imagens ----------
 workbox.routing.registerRoute(
   ({request}) => request.destination === 'image',
   new workbox.strategies.NetworkFirst({
@@ -41,7 +43,7 @@ workbox.routing.registerRoute(
   })
 );
 
-// Regra para CSS e JS: StaleWhileRevalidate (busca do cache primeiro, depois atualiza)
+// ---------- Cache de CSS e JS ----------
 workbox.routing.registerRoute(
   ({request}) => request.destination === 'script' || request.destination === 'style',
   new workbox.strategies.StaleWhileRevalidate({
@@ -49,7 +51,7 @@ workbox.routing.registerRoute(
   })
 );
 
-// Regra para HTML: NetworkFirst (prioriza online, mas usa cache se offline)
+// ---------- Cache de HTML ----------
 workbox.routing.registerRoute(
   ({request}) => request.destination === 'document',
   new workbox.strategies.NetworkFirst({
@@ -57,3 +59,11 @@ workbox.routing.registerRoute(
   })
 );
 
+// ---------- Fallback offline ----------
+workbox.routing.setCatchHandler(async ({ event }) => {
+  // Se falhar ao carregar HTML, retorna offline.html
+  if (event.request.destination === 'document') {
+    return caches.match('/offline.html');
+  }
+  return Response.error();
+});

@@ -25,7 +25,7 @@ self.addEventListener('activate', event => {
 workbox.precaching.precacheAndRoute([
   { url: '/', revision: '1' },               // auth.html (rota Flask)
   { url: '/home', revision: '1' },           // home.html (rota Flask)
-  { url: '/offline.html', revision: '1' },   // fallback offline
+  { url: '/offline', revision: '1' },   // fallback offline
   { url: '/manifest.json', revision: '1' },
 
   // CSS
@@ -34,7 +34,7 @@ workbox.precaching.precacheAndRoute([
 
   // JS
   { url: '/static/js/auth.js', revision: '1' },
-  { url: '/static/js/app.js', revision: '1' },
+  { url: 'app.js', revision: '1' },
 ]);
 
 /* =========================
@@ -80,7 +80,7 @@ workbox.routing.registerRoute(
 ========================= */
 workbox.routing.setCatchHandler(async ({ event }) => {
   if (event.request.destination === 'document') {
-    return caches.match('/offline.html');
+    return caches.match('/offline');
   }
   return Response.error();
 });

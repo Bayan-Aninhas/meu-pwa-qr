@@ -7,6 +7,22 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#FFFFFF">
+
+<script>
+  const token = localStorage.getItem('token');
+  const isOnline = navigator.onLine;
+
+  // Nunca logado
+  if (!token) {
+    window.location.replace('/');
+  }
+
+  // Offline + sem token
+  if (!isOnline && !token) {
+    window.location.replace('/offline');
+  }
+</script>
+
 </head>
 <body>
 

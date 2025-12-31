@@ -46,8 +46,17 @@ function switchForm(formType) {
 // ===== LOGIN =====
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+
+      if (!navigator.onLine) {
+        showOfflineToast();
+        return;
+    }
+
     const form = e.target;
-    const data = { username: form.username.value, password: form.password.value };
+    const data = { 
+        username: form.username.value, 
+        password: form.password.value 
+    };
 
     const response = await fetch('/login', {
         method: 'POST',
@@ -73,8 +82,14 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 });
 
 // ===== REGISTRO =====
-document.getElementById('registerForm').addEventListener('submit', async (e) => {
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+
+      if (!navigator.onLine) {
+        showOfflineToast();
+        return;
+    }
+    
     const form = e.target;
 
     if (form.password.value !== form.confirm_password.value) {
@@ -82,7 +97,10 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         return;
     }
 
-    const data = { username: form.username.value, password: form.password.value };
+    const data = { 
+        username: form.username.value,
+        password: form.password.value 
+    };
 
     const response = await fetch('/register', {
         method: 'POST',
@@ -100,3 +118,19 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     hideForm();
     showLogin();
 });
+
+
+// ===== TOAST OFFLINE =====
+function showOfflineToast() {
+  const toast = document.getElementById('offline-toast');
+  toast.classList.add('show');
+
+  // fecha automaticamente
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+function hideToast() {
+  document.getElementById('offline-toast').classList.remove('show');
+}

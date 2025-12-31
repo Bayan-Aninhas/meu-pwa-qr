@@ -7,7 +7,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#FFFFFF">
+
+        <div class="toast" id="offline-toast">
+    <div class="toast-content">
+        <div class="icon">!</div>
+        <div class="message">
+        <span class="text text-1">Sem ligação à internet</span>
+        <span class="text text-2">É necessário estar online para iniciar sessão ou registar.</span>
+        </div>
+    </div>
+    <span class="close" onclick="hideToast()">×</span>
+    <div class="progress"></div>
+    </div>
 </head>
+
 <body>
     <!-- Elementos decorativos - círculos pretos com animações -->
     <div class="decoration upper-left"></div>
@@ -17,7 +30,7 @@
 
     <div class="container">
         <img src="{{ url_for('static', filename='images/qr-coe.png') }}" alt="QR Code" class="logo">
-        <div class="app-name">A Minha App</div>
+        <div class="app-name">QR Equip</div>
         <div class="buttons" id="main-buttons">
             <button class="sign-up" onclick="showForm('signup')">Registar</button>
             <button class="log-in" onclick="showForm('login')">Iniciar Sessão</button>

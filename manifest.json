@@ -1,7 +1,8 @@
 {
   "name": "Leitor QR Empresa",
   "short_name": "LeitorQR",
-  "start_url": "./home.html",
+  "start_url": "/home.html",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#007bff",

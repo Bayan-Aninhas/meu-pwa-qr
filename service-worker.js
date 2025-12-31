@@ -20,9 +20,9 @@ self.addEventListener('activate', event => {
 // ---------- Pre-cache ----------
 workbox.precaching.precacheAndRoute([
   { url: '/auth.html', revision: '1' },
-  { url: '/home.html', revision: '1' },             // Página home
-  { url: '/offline.html', revision: '1' },     // Página de fallback offline
-  { url: '/manifest.json', revision: '1' },    // Manifest
+  { url: '/home.html', revision: '1' },
+  { url: '/offline.html', revision: '1' },
+  { url: '/manifest.json', revision: '1' },
   { url: '/css/auth.css', revision: '1' },
   { url: '/css/home.css', revision: '1' },
   { url: '/js/auth.js', revision: '1' },
@@ -61,9 +61,11 @@ workbox.routing.registerRoute(
 
 // ---------- Fallback offline ----------
 workbox.routing.setCatchHandler(async ({ event }) => {
-  // Se falhar ao carregar HTML, retorna offline.html
   if (event.request.destination === 'document') {
     return caches.match('/offline.html');
+  }
+  if (event.request.destination === 'image') {
+    return caches.match('/images/fallback.png'); // colocar fallback genérico
   }
   return Response.error();
 });

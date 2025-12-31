@@ -1,71 +1,86 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-sw.js');
 
 if (workbox) {
-  console.log("Workbox carregado com sucesso!");
+  console.log('✅ Workbox carregado com sucesso!');
 } else {
-  console.log("Falha ao carregar Workbox");
+  console.log('❌ Falha ao carregar Workbox');
 }
 
-// ---------- Instalação e ativação ----------
+/* =========================
+   INSTALL & ACTIVATE
+========================= */
 self.addEventListener('install', event => {
-  console.log('Service Worker instalado!');
-  self.skipWaiting(); // Ativa o SW imediatamente
+  console.log('📦 Service Worker instalado');
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  console.log('Service Worker ativado!');
-  self.clients.claim(); // Assume o controlo das páginas imediatamente
+  console.log('🚀 Service Worker ativado');
+  self.clients.claim();
 });
 
-// ---------- Pre-cache ----------
+/* =========================
+   PRE-CACHE (ROTAS REAIS DO FLASK)
+========================= */
 workbox.precaching.precacheAndRoute([
-  { url: '/auth.html', revision: '1' },
-  { url: '/home.html', revision: '1' },
-  { url: '/offline.html', revision: '1' },
+  { url: '/', revision: '1' },               // auth.html (rota Flask)
+  { url: '/home', revision: '1' },           // home.html (rota Flask)
+  { url: '/offline.html', revision: '1' },   // fallback offline
   { url: '/manifest.json', revision: '1' },
-  { url: '/css/auth.css', revision: '1' },
-  { url: '/css/home.css', revision: '1' },
-  { url: '/js/auth.js', revision: '1' },
-  { url: '/js/app.js', revision: '1' },
+
+  // CSS
+  { url: '/static/css/auth.css', revision: '1' },
+  { url: '/static/css/home.css', revision: '1' },
+
+  // JS
+  { url: '/static/js/auth.js', revision: '1' },
+  { url: '/static/js/app.js', revision: '1' },
 ]);
 
-// ---------- Cache de imagens ----------
+/* =========================
+   IMAGENS
+========================= */
 workbox.routing.registerRoute(
-  ({request}) => request.destination === 'image',
-  new workbox.strategies.NetworkFirst({
+  ({ request }) => request.destination === 'image',
+  new workbox.strategies.CacheFirst({
     cacheName: 'images-cache',
     plugins: [
       new workbox.expiration.ExpirationPlugin({
-        maxEntries: 50,
+        maxEntries: 60,
         maxAgeSeconds: 7 * 24 * 60 * 60, // 1 semana
       }),
     ],
   })
 );
 
-// ---------- Cache de CSS e JS ----------
+/* =========================
+   CSS & JS
+========================= */
 workbox.routing.registerRoute(
-  ({request}) => request.destination === 'script' || request.destination === 'style',
+  ({ request }) =>
+    request.destination === 'style' ||
+    request.destination === 'script',
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: 'assets-cache',
   })
 );
 
-// ---------- Cache de HTML ----------
+/* =========================
+   HTML (PÁGINAS)
+========================= */
 workbox.routing.registerRoute(
-  ({request}) => request.destination === 'document',
+  ({ request }) => request.destination === 'document',
   new workbox.strategies.NetworkFirst({
-    cacheName: 'html-cache',
+    cacheName: 'pages-cache',
   })
 );
 
-// ---------- Fallback offline ----------
+/* =========================
+   FALLBACK OFFLINE
+========================= */
 workbox.routing.setCatchHandler(async ({ event }) => {
   if (event.request.destination === 'document') {
     return caches.match('/offline.html');
-  }
-  if (event.request.destination === 'image') {
-    return caches.match('/images/fallback.png'); // colocar fallback genérico
   }
   return Response.error();
 });

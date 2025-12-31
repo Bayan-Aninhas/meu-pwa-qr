@@ -160,6 +160,10 @@ def procurar_equipamento():
 def serve_auth():
     return render_template('auth.html')
 
+@app.route('/offline')
+def serve_offline():
+    return render_template('offline.html')
+
 # ------------------------
 # ROTAS PARA ESTÁTICOS
 # ------------------------

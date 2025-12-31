@@ -1,6 +1,6 @@
 // Registra o service worker (para virar PWA)
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
+  navigator.serviceWorker.register('/service-worker.js');
 }
 
 // Inicializa o leitor de QR Code
@@ -15,12 +15,8 @@ function iniciarLeitor() {
     },
     qrCodeMessage => {
       document.getElementById("resultado").innerText = "QR Code lido: " + qrCodeMessage;
-
-      // Aqui poderias fazer:
-      // fetch('https://api.empresa.com/registos', { method: 'POST', body: JSON.stringify({ codigo: qrCodeMessage }) })
     },
     errorMessage => {
-      // Erros de leitura (opcional)
     }
   );
 }
